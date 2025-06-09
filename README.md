@@ -29,7 +29,7 @@ Além disso, o sistema avalia a elegibilidade para crédito automotivo baseado n
 
 ### Pré-requisitos
 
-- Java 17 ou superior
+- Java 21
 - Docker e Docker Compose
 - Maven
 
