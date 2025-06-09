@@ -54,7 +54,7 @@ docker-compose up -d
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/challenge-java-developer.git
+git clone https://github.com/Viniciusfelp/challenge-java-developer.git
 cd challenge-java-developer
 ```
 
