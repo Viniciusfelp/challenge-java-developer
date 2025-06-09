@@ -1,39 +1,123 @@
-# Avaliação para admissão de Desenvolvedores para a Neurotech
+# Challenge Java Developer - Neurotech
 
-## Instruções
+Este projeto é uma API RESTful para avaliação e aplicação de diferentes modalidades de crédito a clientes PF, de acordo com critérios específicos. Desenvolvido como parte do desafio para desenvolvedores Java da Neurotech.
 
-- Realize o fork deste projeto para desenvolver a sua solução. Não serão aceitos commits diretamente para este repositório;
-- Após o desenvolvimento da sua solução, nos avise, enviando o link do seu projeto para que iniciemos a avaliação. **Não crie Pull Requests!**
-- A solução deve ser entregue em um prazo máximo de 3 dias. 
+## Tecnologias Utilizadas
 
-## Descrição
+- Java 21
+- Spring Boot
+- Spring Data JPA
+- MySQL
+- Docker
+- Swagger/OpenAPI para documentação
+- Flyway para migrações de banco de dados
+- Maven
 
-Trata-se de um projeto que avalia e aplica modalidades diferentes de crédito a clientes PF, de acordo com critérios específicos. As modalidades diferentes de crédito estão descritas a seguir:
+## Funcionalidades
 
--   Crédito com Juros fixos: Aplicado a clientes com idade entre 18 e 25 anos, independente de renda. Taxa de 5% a.a
--   Crédito com Juros variáveis: Aplicado a clientes com idade entre 21 e 65 anos, com renda entre R$ 5000,00 e R$ 15000,00.
--   Crédito Consignado: Aplicado a clientes acima de 65 anos, independente de renda.
+O sistema oferece diferentes modalidades de crédito baseadas em critérios específicos:
 
-O projeto deve ser implantado como uma API RESTful, utilizando a linguagem Java e o framework Springboot. Atentar para implementações típicas de uma API RESTful, como códigos HTTP para cada tipo de endpoint, validação de dados, Documentação utilizando Swagger, e também testes automáticos para os endpoints implementados.
+- **Crédito com Juros fixos**: Aplicado a clientes com idade entre 18 e 25 anos, independente de renda. Taxa de 5% a.a.
+- **Crédito com Juros variáveis**: Aplicado a clientes com idade entre 21 e 65 anos, com renda entre R$ 5.000,00 e R$ 15.000,00.
+- **Crédito Consignado**: Aplicado a clientes acima de 65 anos, independente de renda.
 
-De maneira obrigatória, os seguintes endpoints devem ser implementados:
+Além disso, o sistema avalia a elegibilidade para crédito automotivo baseado no modelo do veículo:
+- **Hatch**: Renda entre R$ 5.000,00 e R$ 15.000,00.
+- **SUV**: Renda acima de R$ 8.000,00 e idade superior a 20 anos.
 
--   Endpoint para cadastro de clientes: Deve receber Informações como Nome, idade, renda. Como retorno, uma entrada no header da resposta contendo a URL que identifica o cliente (Ex: [http://localhost/api/client/050](http://localhost/api/client/050)). O nome do header deve ser “Location”.
-    
--   Endpoint para retornar os dados do cliente de acordo com seu ID, indicado na URL (Ex: [http://localhost/api/client/050](http://localhost/api/client/050)). O retorno deve ser um objeto JSON contendo os dados do cliente. Por exemplo:
+## Configuração do Ambiente
+
+### Pré-requisitos
+
+- Java 17 ou superior
+- Docker e Docker Compose
+- Maven
+
+### Configuração do Banco de Dados
+
+O projeto utiliza MySQL como banco de dados. Para configurar o banco de dados usando Docker:
+
+1. Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+```
+MYSQL_ROOT_PASSWORD=sua_senha_root
+MYSQL_DATABASE=neurotech
+MYSQL_USER=credito
+MYSQL_PASSWORD=credito1234
+```
+
+2. Inicie o container do MySQL:
+```bash
+docker-compose up -d
+```
+
+### Executando a Aplicação
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/challenge-java-developer.git
+cd challenge-java-developer
+```
+
+2. Compile o projeto:
+```bash
+./mvnw clean install
+```
+
+3. Execute a aplicação:
+```bash
+./mvnw spring-boot:run
+```
+
+A aplicação estará disponível em: http://localhost:5000
+
+## Documentação da API
+
+A documentação da API está disponível através do Swagger UI:
+- URL: http://localhost:5000/swagger-ui.html
+
+### Endpoints Principais
+
+#### Clientes
+- `POST /api/client` - Cadastra um novo cliente
+- `GET /api/client/{id}` - Retorna os dados de um cliente específico
+
+#### Crédito
+- `GET /api/credit/{id}/check/{vehicleModel}` - Verifica se um cliente está apto a receber crédito para um determinado modelo de veículo
+- `GET /api/credit/eligible-clients/hatch-fixed-interest` - Retorna todos os clientes entre 23 e 49 anos que possuem Crédito com juros fixos e estão aptos a adquirirem crédito automotivo para veículos do tipo Hatch
+
+## Estrutura do Projeto
 
 ```
-{ 
-  "Name": "Bob",
-  "Age": 40,
-  "Income": 10000
-}
+src/
+├── main/
+│   ├── java/
+│   │   └── br/
+│   │       └── com/
+│   │           └── neurotech/
+│   │               └── challenge/
+│   │                   ├── controller/    # Controladores REST
+│   │                   ├── DTOs/          # Objetos de Transferência de Dados
+│   │                   ├── entity/        # Entidades JPA
+│   │                   ├── exception/     # Exceções personalizadas
+│   │                   ├── repository/    # Repositórios Spring Data
+│   │                   ├── rules/         # Regras de negócio
+│   │                   ├── service/       # Serviços
+│   │                   └── ChallengeJavaDeveloperApplication.java
+│   └── resources/
+│       ├── application.yaml  # Configurações da aplicação
+│       └── db/
+│           └── migration/    # Scripts de migração Flyway
+└── test/                     # Testes automatizados
 ```
--   Endpoint para definir se um determinado cliente está apto a oferecer um crédito automotivo para determinado modelo de veículo.
-    -   Hatch: Renda entre R$ 5000,00 e R$15000,00.
-    -   SUV: Renda acima de R$8000,00 e idade superior a 20 anos.
-    
 
-Como adicional, mas não obrigatório, implemente um endpoint para se determinar todos os clientes entre 23 e 49 anos que possuem Crédito com juros fixos e estão aptos a adquirirem crédito automotivo para veículos do tipo Hatch. O objeto de retorno deve conter uma lista com o nome e a renda de cada um destes clientes.
+## Testes
 
-Boa sorte!
+Para executar os testes:
+
+```bash
+./mvnw test
+```
+
+## Licença
+
+Este projeto é parte de um desafio de código e não possui uma licença específica.
