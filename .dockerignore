@@ -1,0 +1,19 @@
+# Maven
+target/
+.mvn/
+
+# IDEs
+.idea/
+*.iml
+
+# VCS
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Others
+node_modules/
+.env
